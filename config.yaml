@@ -1,0 +1,84 @@
+schedules:
+    - name: lawn
+      zone: 1
+      length: 30
+      days:
+        - Tuesday
+        - Friday
+        - Sunday
+      timing:
+        - "0:00"
+        - "3:00"
+        - "6:00"
+        - "9:00"
+    - name: shrubs
+      zone: 2
+      length: 30
+      days:
+        - Thursday
+      timing:
+        - "0:00"
+        - "2:00"
+        - "5:15"
+        - "7:15"
+    - name: pond
+      zone: 3
+      length: 120
+      days:
+        - Wednesday
+      timing:
+        - "1:00"
+        - "3:30"
+        - "6:00"
+        - "8:30"
+    - name: east_bank_woodshed
+      zone: 5
+      length: 90
+      days:
+        - Thursday
+      timing:
+        - "1:00"
+        - "3:30"
+        - "6:00"
+        - "8:30"
+    - name: east_section
+      zone: 5
+      length: 120
+      days:
+        - Saturday
+      timing:
+        - "1:00"
+        - "3:30"
+        - "6:00"
+        - "8:30"
+    - name: citrus
+      zone: 9
+      length: 90
+      days:
+        - Monday
+        - Friday
+      timing:
+        - "1:00"
+        - "4:00"
+        - "7:00"
+        - "10:00"
+    - name: far_section
+      zone: 10
+      length: 120
+      days:
+        - Sunday
+      timing:
+        - "1:00"
+        - "4:00"
+        - "7:00"
+        - "10:00"
+    - name: native_island
+      zone: 11
+      length: 90
+      days:
+        - Tuesday
+      timing:
+        - "1:00"
+        - "4:00"
+        - "7:00"
+        - "10:00"
