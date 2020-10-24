@@ -2,7 +2,8 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const cron = require('node-cron');
 const emoji = require('node-emoji');
-const https = require('https')
+const https = require('https');
+const Sentry = require("@sentry/node");
 const WebSocket = require('ws');
 
 const debug = true;
@@ -149,6 +150,7 @@ function login(user, pass) {
         
         req.on('error', error => {
             reject(error);
+            Sentry.captureException(error);
         })
         
         req.write(data);
@@ -181,6 +183,13 @@ const main = async function(a, b) {
         });
     });
 
+    if (config.sentry) {
+        console.log("** Sentry enabled");
+        Sentry.init({
+            dsn: config.sentry,
+        });
+    }
+
     var socketUrl;
 
     await login(env.credentials.username, env.credentials.password)
@@ -189,6 +198,7 @@ const main = async function(a, b) {
     })
     .catch(error => {
         console.error("Unable to login and create session:", error);
+        Sentry.captureException(error);
     });
 
     console.log(socketUrl);
@@ -273,6 +283,7 @@ const main = async function(a, b) {
             console.log(logline);
         } catch (e) {
             console.log(emoji.get('rotating_light') + " Cannot parse data : " + e);
+            Sentry.captureException(e);
         }
         
     });

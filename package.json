@@ -3,6 +3,7 @@
   "description": "Control your Sprinkl the way you want",
   "author": "Tim 'diff' Strazzere <diff@protonmail.com>",
   "dependencies": {
+    "@sentry/node": "^5.27.1",
     "chrono-node": "2.1.8",
     "js-yaml": "3.14.0",
     "node-cron": "2.0.3",
