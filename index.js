@@ -255,9 +255,9 @@ const main = async function(a, b) {
                 case 'online_status':
                     if (data.status === 'online') {
                         logline += emoji.get('ok_hand');
-                    } if (data.status === 'offline') {
+                    } else if (data.status === 'offline') {
                         logline += emoji.get('rotating_light') + " device offline!";
-                    }else {
+                    } else {
                         logline += emoji.get('rotating_light') + " online status not as expected: " + data.status;
                     }
                     break;
