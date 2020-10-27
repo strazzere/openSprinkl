@@ -1,4 +1,3 @@
-sentry: https://93241cf1ee6540d68409267f751d4ac5@o196204.ingest.sentry.io/5480627
 schedules:
     - name: lawn
       zone: 1
@@ -19,9 +18,9 @@ schedules:
         - Thursday
       timing:
         - "0:00"
-        - "2:00"
+        - "2:45"
         - "5:15"
-        - "7:15"
+        - "7:45"
     - name: pond
       zone: 3
       length: 120
