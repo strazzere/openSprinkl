@@ -173,6 +173,26 @@ class openSprinkl {
         return this.getHttps(uri, uri);
     }
 
+    async history(sessionID, deviceID) {
+        if (sessionID === undefined ) {
+            new Error("No sessionID provided");
+        }
+
+        const uri = 'api/devices/' + deviceID +'/history?session_id=' + sessionID;
+
+        return this.getHttps(uri, uri);
+    }
+
+    async schedules(sessionID, deviceID, year, month) {
+        if (sessionID === undefined ) {
+            new Error("No sessionID provided");
+        }
+
+        const uri = 'api/devices/' + deviceID + '/schedules/' + year + '/' + month + '?session_id=' + sessionID;
+
+        return this.getHttps(uri, uri);
+    }
+
 //     curl 'https://app.sprinkl.com/api/devices/all?session_id=5f97a10e3a40347036f10e92' \
 //   -H 'authority: app.sprinkl.com' \
 //   -H 'pragma: no-cache' \
