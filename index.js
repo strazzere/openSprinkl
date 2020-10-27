@@ -92,7 +92,9 @@ const main = async function() {
                     default:
                         console.log("data.type : ", data.type, " data :", data);
                 }
-                logline += timestampString(data.timestamp);
+                if (data.timestamp) {
+                    logline += timestampString(data.timestamp);
+                }
                 console.log(logline);
             } catch (e) {
                 console.log(emoji.get('rotating_light') + " Cannot parse data : " + e);
