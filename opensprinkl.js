@@ -13,8 +13,8 @@ class openSprinkl {
         this.closeListener = closeListener;
     }
 
-    async createSchedule(zone, zoneId, runTime) {
-        sendSocket({
+    async createSchedule(days, zone, zoneId, runTime) {
+        this.sendSocket({
             "type": "request",
             "action": "schedule_create",
             "schedule": {
@@ -22,11 +22,7 @@ class openSprinkl {
             "type": "standard",
             "frequency": "weekly",
             "start_time": "2020-10-20T01:24:40.403Z",
-            "days": [
-                "M",
-                "W",
-                "F"
-            ],
+            "days": days, // Array
             "zones": [
                 {
                 "id": zone,
@@ -42,21 +38,21 @@ class openSprinkl {
                 "wind": true
             },
             "enabled": true,
-            "cycle_soak": true,
+            "cycle_soak": false,
             "seasonally_adjust": false
             }
         });
     }
 
     async haltAction() {
-        sendSocket({ 
+        this.sendSocket({
             "type": "request",
             "action": "halt"
         });
     }
 
     async manualRun(zone, time) {
-        sendSocket({
+        this.sendSocket({
             "type": "request",
             "action": "run",
             "zones": [
@@ -69,9 +65,7 @@ class openSprinkl {
     }
 
     async sendSocket(data) {
-        if (debug) {
-            console.log(">>>", JSON.stringify(data));
-        }
+        console.log(">>>", JSON.stringify(data));
         this.socket.send(JSON.stringify(data));
     }
 
@@ -192,20 +186,6 @@ class openSprinkl {
 
         return this.getHttps(uri, uri);
     }
-
-//     curl 'https://app.sprinkl.com/api/devices/all?session_id=5f97a10e3a40347036f10e92' \
-//   -H 'authority: app.sprinkl.com' \
-//   -H 'pragma: no-cache' \
-//   -H 'cache-control: no-cache' \
-//   -H 'accept: application/json, text/plain, */*' \
-//   -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36' \
-//   -H 'dnt: 1' \
-//   -H 'sec-fetch-site: same-origin' \
-//   -H 'sec-fetch-mode: cors' \
-//   -H 'sec-fetch-dest: empty' \
-//   -H 'referer: https://app.sprinkl.com/auth/login' \
-//   -H 'accept-language: en-US,en;q=0.9' \
-//   --compressed
 }
 
 module.exports = { openSprinkl }
