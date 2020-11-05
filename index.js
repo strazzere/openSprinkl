@@ -7,21 +7,6 @@ const { openSprinkl } = require('./opensprinkl');
 const debug = false;
 
 const main = async function() {
-    var env = loadYaml("./env.yaml");
-    if (!env || !env.credentials) {
-        console.error("Error loading credentials!");
-        return;
-    }
-
-    env.debug ? debug = env.debug : false;
-
-    if (env.sentry) {
-        console.log("** Sentry enabled");
-        Sentry.init({
-            dsn: env.sentry,
-        });
-    }
-
     var config = loadYaml("./config.yaml");
     if (!config || !config.schedules) {
         console.error('Unable to load any configurations!');
@@ -126,24 +111,22 @@ const main = async function() {
     });
 };
 
+const env = loadYaml("./env.yaml");
+if (!env || !env.credentials) {
+    console.error("Error loading credentials!");
+    return;
+}
+
+env.debug ? debug = env.debug : false;
+
+if (env.sentry) {
+    console.log("** Sentry enabled");
+    Sentry.init({
+        dsn: env.sentry,
+    });
+}
+
 main().catch(err => {
     console.log("err: ", err);
     Sentry.captureException(err);
 });
-
-setTimeout(function(){
-
-    // var sprinklerData = {
-    //     "type": "request",
-    //     "action": "run",
-    //     "zones": [
-    //       {
-    //         "zone": 3,
-    //         "time": 120
-    //       }
-    //     ]
-    //   };
-      
-    //   socket.send(JSON.stringify(sprinklerData));
-    // haltAction(socket);
-}, 3000);
