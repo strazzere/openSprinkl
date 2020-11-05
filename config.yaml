@@ -68,10 +68,10 @@ schedules:
       days:
         - Sunday
       timing:
-        - "1:00"
-        - "4:00"
-        - "7:00"
-        - "10:00"
+        - "0:45"
+        - "3:45"
+        - "6:45"
+        - "9:45"
     - name: native_island
       zone: 11
       length: 90
