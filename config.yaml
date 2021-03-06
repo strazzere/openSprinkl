@@ -7,7 +7,6 @@ schedules:
         - Friday
         - Sunday
       timing:
-        - "0:00"
         - "3:00"
         - "6:00"
         - "9:00"
@@ -17,17 +16,15 @@ schedules:
       days:
         - Thursday
       timing:
-        - "0:00"
         - "2:45"
         - "5:15"
         - "7:45"
     - name: pond
       zone: 3
-      length: 120
+      length: 60
       days:
         - Wednesday
       timing:
-        - "1:00"
         - "3:30"
         - "6:00"
         - "8:30"
@@ -37,27 +34,24 @@ schedules:
       days:
         - Thursday
       timing:
-        - "1:00"
         - "3:30"
         - "6:00"
         - "8:30"
     - name: east_section
       zone: 5
-      length: 120
+      length: 60
       days:
         - Saturday
       timing:
-        - "1:00"
         - "3:30"
         - "6:00"
         - "8:30"
     - name: far_section
       zone: 10
-      length: 120
+      length: 60
       days:
         - Sunday
       timing:
-        - "0:45"
         - "3:45"
         - "6:45"
         - "9:45"
