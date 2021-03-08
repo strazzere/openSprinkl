@@ -36,7 +36,7 @@ schedules:
         - "6:00"
         - "8:30"
     - name: east_section
-      zone: 5
+      zone: 6
       length: 60
       days:
         - Saturday
@@ -44,15 +44,6 @@ schedules:
         - "3:30"
         - "6:00"
         - "8:30"
-    - name: far_section
-      zone: 10
-      length: 30
-      days:
-        - Sunday
-      timing:
-        - "3:45"
-        - "6:45"
-        - "9:45"
     - name: citrus
       zone: 9
       length: 30
@@ -63,3 +54,12 @@ schedules:
         - "1:00"
         - "4:00"
         - "7:00"
+    - name: far_section
+      zone: 10
+      length: 30
+      days:
+        - Sunday
+      timing:
+        - "3:45"
+        - "6:45"
+        - "9:45"
