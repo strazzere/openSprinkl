@@ -28,7 +28,7 @@ schedules:
         - "8:30"
     - name: east_bank_woodshed
       zone: 5
-      length: 90
+      length: 60
       days:
         - Thursday
       timing:
@@ -46,7 +46,7 @@ schedules:
         - "8:30"
     - name: citrus
       zone: 9
-      length: 30
+      length: 60
       days:
         - Monday
         - Friday
@@ -63,3 +63,12 @@ schedules:
         - "3:45"
         - "6:45"
         - "9:45"
+    - name: native_island
+      zone: 11
+      length: 60
+      days:
+        - Tuesday
+      timing:
+        - "1:00"
+        - "4:00"
+        - "7:00"
