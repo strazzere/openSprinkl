@@ -3,7 +3,7 @@ const https = require('https');
 const WebSocket = require('ws');
 
 class openSprinkl {
-    constructor(options, openListener, incomingListener, closeListener) {
+    constructor(options, openListener, incomingListener, closeListener, errorListener) {
 
         this.credentials = options.credentials;
         this.cloudSessionID = undefined;
@@ -11,6 +11,7 @@ class openSprinkl {
         this.openListener = openListener;
         this.incomingListener = incomingListener;
         this.closeListener = closeListener;
+        this.errorListener = errorListener;
     }
 
     async createSchedule(days, zone, zoneId, runTime) {
@@ -95,6 +96,7 @@ class openSprinkl {
         this.socket.addEventListener('open', this.openListener);
         this.socket.addEventListener('message', this.incomingListener);
         this.socket.addEventListener('onclose', this.closeListener);
+        this.socket.addEventListener('error', this.errorListener);
     }
 
     async getHttps(uri, data) {

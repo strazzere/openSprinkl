@@ -88,7 +88,10 @@ const main = async function() {
         },
         function () {
             console.log('*** Disconnected');
-        }
+        },
+        function (error) {
+            console.log('*** Disconnected -- error', error);
+        },
     );
 
     console.log("About to start...");
