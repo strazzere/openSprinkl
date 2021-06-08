@@ -18,16 +18,16 @@ schedules:
         - Sunday
       timing:
         - "2:45"
-        - "7:45"
+        - "9:45"
     - name: pond
       zone: 3
-      length: 60
+      length: 45
       days:
         - Thursday
       timing:
         - "1:00"
-        - "3:30"
-        - "6:30"
+        - "4:00"
+        - "7:00"
     - name: pond_east_bank
       zone: 5
       length: 60
