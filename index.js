@@ -45,6 +45,7 @@ const main = async function() {
                                 } else {
                                     logline += "unsuccessful ";
                                 }
+                                break;
                             default:
                                 console.log("RESPONSE: data.type : ", data.type, " data :", data);
                         }
