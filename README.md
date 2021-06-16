@@ -4,7 +4,9 @@
 
 I bought this interesting device which is just a simple IoT sprinkler controller. However the developers don't believe it's necessary to have more than 13 schedules (anything that start/stops once is a schedule) and refuse to update this. They claim it's because people will waste water and they'd get dinged by the EPA or something?
 
-Regardless, I bought this device for a reason and nothing listed the above restrictions. So I just grabbed the websocket interactions off the webapp and wrote some code to schedule `manualRun`s instead of using their scheduler. It seems to work fine now, and the product is pretty decent once you're allowed to do whatever you want with it.
+~~Regardless, I bought this device for a reason and nothing listed the above restrictions. So I just grabbed the websocket interactions off the webapp and wrote some code to schedule `manualRun`s instead of using their scheduler. It seems to work fine now, and the product is pretty decent once you're allowed to do whatever you want with it.~~
+
+The service is depricating the web app for some reason - so MQTT is utilized instead of the old websocket. The format is essentially the same. Note that there is a hardcoded password for all clients to interact with MQTT. This might be a bad design as it appears anyone could subscribe to anyone elses topics?
 
 Next steps would be to make some type of UI if anyone cares, or replace the actual firmware on the device/server call out. It wasn't difficult to root either, just haven't bothered doing this yet as I still need to water my lawn. Maybe when the rainy season comes I'll take the next step.
 

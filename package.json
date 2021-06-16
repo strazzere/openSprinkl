@@ -4,11 +4,12 @@
   "author": "Tim 'diff' Strazzere <diff@protonmail.com>",
   "dependencies": {
     "@sentry/node": "^5.27.1",
-    "chrono-node": "2.1.8",
+    "chrono-node": "2.3.0",
     "js-yaml": "3.14.0",
+    "mqtt": "^4.2.6",
     "node-cron": "2.0.3",
     "node-emoji": "1.10.0",
-    "ws": "7.3.1"
+    "uuid": "^8.3.2"
   },
   "engine": "node >= 12.19.0"
 }

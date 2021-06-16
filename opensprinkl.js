@@ -1,6 +1,7 @@
 
 const https = require('https');
-const WebSocket = require('ws');
+const mqtt = require('mqtt')
+const uuidv4 = require('uuid').v4;
 
 class openSprinkl {
     constructor(options, openListener, incomingListener, closeListener, errorListener) {
@@ -15,59 +16,57 @@ class openSprinkl {
     }
 
     async createSchedule(days, zone, zoneId, runTime) {
-        this.sendSocket({
-            "type": "request",
-            "action": "schedule_create",
+        this.sendMqtt({
+            "type": "schedule_create",
             "schedule": {
-            "name": "Schedule 1",
-            "type": "standard",
-            "frequency": "weekly",
-            "start_time": "2020-10-20T01:24:40.403Z",
-            "days": days, // Array
-            "zones": [
-                {
-                "id": zone,
-                "number": zoneId,
-                "run_time": runTime
-                }
-            ],
-            "ignore": {
-                "rain_chance": true,
-                "temp": true,
-                "rain": true,
-                "rain_inches": true,
-                "wind": true
-            },
-            "enabled": true,
-            "cycle_soak": false,
-            "seasonally_adjust": false
+                "name": "Schedule 1",
+                "type": "standard",
+                "frequency": "weekly",
+                "start_time": "2020-10-20T01:24:40.403Z",
+                "days": days, // Array
+                "zones": [
+                    {
+                    "id": zone,
+                    "number": zoneId,
+                    "run_time": runTime
+                    }
+                ],
+                "ignore": {
+                    "rain_chance": true,
+                    "temp": true,
+                    "rain": true,
+                    "rain_inches": true,
+                    "wind": true
+                },
+                "enabled": true,
+                "cycle_soak": false,
+                "seasonally_adjust": false
             }
         });
     }
 
     async haltAction() {
-        this.sendSocket({
-            "type": "request",
-            "action": "halt"
+        this.sendMqtt({
+            "type": "halt"
         });
     }
 
     async manualRun(zone, time) {
-        this.sendSocket({
-            "type": "request",
-            "action": "run",
+        this.sendMqtt({
+            "type": "manual_run",
             "zones": [
-            {
-                "zone": zone,
-                "time": time
-            }
+                {
+                    "zone": zone,
+                    "time": time
+                }
             ]
         });
     }
 
-    async sendSocket(data) {
+    async sendMqtt(data) {
+        data.message_id = uuidv4();
         console.log(">>>", JSON.stringify(data));
-        this.socket.send(JSON.stringify(data));
+        this.client.publish(`/SR400/${this.deviceID}/actions`, data)
     }
 
     async start() {
@@ -80,23 +79,45 @@ class openSprinkl {
             console.error("Unable to login:", error);
         });
 
+        console.log('Getting devices...')
         await this.devices(this.cloudSessionID)
         .then(data => {
             if (data.devices[0] !== undefined && data.devices[0].enabled === true) {
-                this.deviceID = data.devices[0].id;
+                this.deviceID = data.devices[0].uuid;
             }
         })
         .catch(error => {
             console.error("Unable to create session:", error);
         });
 
-        var socketUrl = 'wss://stream-api.sprinkl.com/v1/' + this.deviceID + '?cloud_session_id=' + this.cloudSessionID;
+        console.log(`Using ${this.deviceID}`)
 
-        this.socket = new WebSocket(socketUrl);
-        this.socket.addEventListener('open', this.openListener);
-        this.socket.addEventListener('message', this.incomingListener);
-        this.socket.addEventListener('onclose', this.closeListener);
-        this.socket.addEventListener('error', this.errorListener);
+        var client = mqtt.connect('ssl://mqtt-control.sprinkl.io', {
+            port: 8884,
+            username: 'sr400',
+            password: 'w4terthel4wn', // It's from the app, so *shrug*
+            protocol: 'ssl',
+            clientId: 'sprinkl' + uuidv4()
+        })
+
+        var topic = `/SR400/${this.deviceID}/events/#`
+
+        client.on('connect', function() {
+            console.log(`Subscribed to ${topic}`);
+            client.subscribe(topic)
+        });
+
+        client.on('message', function(topic, message, packet) {
+            // console.log('Received Message:= ' + message.toString() + '\nOn topic:= ' + topic)
+        });
+
+        client.addListener('connect', this.openListener);
+        client.addListener('message', this.incomingListener);
+        client.addListener('close', this.closeListener);
+        client.addListener('error', this.errorListener);
+
+        this.client = client
+        this.topic = topic
     }
 
     async getHttps(uri, data) {
@@ -112,7 +133,7 @@ class openSprinkl {
             const jsonData = JSON.stringify(data);
             
             const options = {
-                hostname: 'app.sprinkl.com',
+                hostname: 'cloud.sprinkl.io',
                 port: 443,
                 path: uri,
                 method: method,
@@ -125,14 +146,20 @@ class openSprinkl {
                 }
             }
 
-            const req = https.request(options, res => {        
-                res.on('data', d => {
-                    var data = JSON.parse(d);
+            const req = https.request(options, res => {
+                var data = '';
 
-                    if (data.success !== true) {
-                        reject('Error ', data);
+                res.on('data', chunk => {
+                    data += chunk;
+                });
+
+                res.on('end', () => {
+                    var parsed = JSON.parse(data);
+
+                    if (parsed.success !== true) {
+                        reject('Error ', parsed);
                     }
-                    resolve(data);
+                    resolve(parsed);
                 });
             });
             
@@ -154,7 +181,7 @@ class openSprinkl {
             email: user,
             password: pass,
         });
-        const uri = '/api/user/authenticate?email=' + user + '&password=' + pass;
+        const uri = '/user/authenticate.json';
 
         return this.postHttps(uri, data);
     }
@@ -164,7 +191,7 @@ class openSprinkl {
             new Error("No sessionID provided");
         }
 
-        const uri = '/api/devices/all?session_id=' + sessionID;
+        const uri = '/user/control/devices.json?session_id=' + sessionID;
         
         return this.getHttps(uri, uri);
     }
@@ -174,7 +201,7 @@ class openSprinkl {
             new Error("No sessionID provided");
         }
 
-        const uri = 'api/devices/' + deviceID +'/history?session_id=' + sessionID;
+        const uri = '/user/control/devices/' + deviceID +'/history.json?session_id=' + sessionID;
 
         return this.getHttps(uri, uri);
     }
