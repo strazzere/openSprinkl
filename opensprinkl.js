@@ -66,7 +66,7 @@ class openSprinkl {
     async sendMqtt(data) {
         data.message_id = uuidv4();
         console.log(">>>", JSON.stringify(data));
-        this.client.publish(`/SR400/${this.deviceID}/actions`, data)
+        this.client.publish(`/SR400/${this.deviceID}/actions`, JSON.stringify(data))
     }
 
     async start() {
