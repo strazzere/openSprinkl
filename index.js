@@ -46,6 +46,9 @@ const main = async function() {
                                     logline += "unsuccessful ";
                                 }
                                 break;
+                            case 'error':
+                                logline += emoji.get('rotating_light') + " error " + data.body
+                                break;
                             default:
                                 console.log("RESPONSE: data.type : ", data.type, " data :", data);
                         }

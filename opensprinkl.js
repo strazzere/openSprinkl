@@ -51,10 +51,11 @@ class openSprinkl {
         });
     }
 
+    // {"message_id":"40fdf729-0009-49cd-872f-84162277773d","type":"manual_run","zone_times":[{"zone":2,"time":25}]}
     async manualRun(zone, time) {
         this.sendMqtt({
             "type": "manual_run",
-            "zones": [
+            "zone_times": [
                 {
                     "zone": zone,
                     "time": time
